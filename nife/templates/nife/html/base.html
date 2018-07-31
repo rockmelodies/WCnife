@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Title{% endblock %}</title>
+    <link rel="stylesheet" href={% static "nife/css/bootstrap.min.css"%}>
+    <link rel="stylesheet" href={% static 'nife/css/top/themes/image.css' %}>
+    <link rel="stylesheet" href={% static 'nife/css/font-awesome.min.css' %}>
+    <link rel="stylesheet" href={% static 'nife/css/style.css' %}>
+    {% block selfscropt %}
+    {% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark text-white fixed-top">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'nife/img/logocat.png'%}" class="rounded-circle" alt="Logo" style="width:40px;">
+    </a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="#">首页</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">说明</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">关于</a>
+        </li>
+    </ul>
+</nav>
+{% block content %}
+{% endblock %}
+<script src={% static 'nife/js/jquery-3.3.1.min.js' %}></script>
+<script src={% static 'nife/js/popper.min.js' %}></script>
+<script src={% static "nife/js/bootstrap.min.js" %}></script>
+<script src={% static 'nife/js/jquery.scrollUp.min.js' %}></script>
+<script src={% static 'nife/js/top.js' %}></script>
+</body>
+</html>

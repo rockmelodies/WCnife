@@ -1,0 +1,63 @@
+{% extends 'nife/html/base.html' %}
+{% load static %}
+{% block title %}
+    工作台
+{% endblock %}
+{% block selfscropt %}
+    <script>var nife_url = "{% url "nife:getfilelist" %}"</script>
+    <script src={% static 'nife/js/nife/base_fun.js' %}></script>
+    <script src={% static 'nife/js/nife/sendRequest.js' %}></script>
+    <style>
+        .breadcrumb a{
+            color: black;
+        }
+
+        .breadcrumb > li + li:before {
+            color: black;
+            content: "/ ";
+            padding: 0 5px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+        <div class="place"></div>
+
+    <div class="container">
+    <br>
+    <h1 class="text-center">Web中国菜刀</h1>
+    <div class="place"></div>
+    {% csrf_token %}
+    <input type="hidden" id="url" value="{{ url }}"/>
+    <input type="hidden" id="pwd" value="{{ pwd }}"/>
+    <ol class="breadcrumb" id="bread">
+        {% for path in path_list %}
+            {% if forloop.last %}
+                <li class="active">{{ path }}</li>
+                {% else %}
+                <li><a href="##" onclick="getFileList(this)">{{ path }}</a></li>
+            {% endif %}
+
+        {% endfor %}
+    </ol>
+    <table class="table table-striped">
+        <thead>
+      <tr>
+            <th>文件名</th>
+            <th>类型</th>
+            <th>时间</th>
+            <th>大小</th>
+      </tr>
+    </thead>
+        <tbody id="filesbody">
+        {% for i in files %}
+            <tr>
+                <td>{{ i.name }}</td>
+                <td>{{ i.type }}</td>
+                <td>{{ i.time }}</td>
+                <td>{{ i.size }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}

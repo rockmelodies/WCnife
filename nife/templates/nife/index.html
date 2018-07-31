@@ -1,0 +1,27 @@
+{% extends 'nife/html/base.html' %}
+{% load static %}
+{% block title %}
+    Web版中国菜刀
+{% endblock %}
+{% block content %}
+    <div class="place"></div>
+
+    <div class="container">
+    <br>
+    <h1 class="text-center">Web中国菜刀</h1>
+    <div class="container" align="center">
+        <div class="place"></div>
+        <div class="place"></div>
+        <form method="post" action="{% url "nife:login" %}" class="text-center" style="width: 50%;">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="url" class="form-control" name="url" placeholder="http://">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="pwd" placeholder="密码">
+            </div>
+            <button type="submit" class="btn btn-primary" >连接</button>
+        </form>
+    </div>
+    </div>
+{% endblock %}
