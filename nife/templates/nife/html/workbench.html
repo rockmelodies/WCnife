@@ -4,14 +4,13 @@
     工作台
 {% endblock %}
 {% block selfscropt %}
-    <script>var nife_url = "{% url "nife:getfilelist" %}"</script>
+    <script>
+        var nife_url = "{% url "nife:getfilelist" %}";
+        var dow_url = "{% url "nife:download" %}";
+    </script>
     <script src={% static 'nife/js/nife/base_fun.js' %}></script>
     <script src={% static 'nife/js/nife/sendRequest.js' %}></script>
     <style>
-        .breadcrumb a{
-            color: black;
-        }
-
         .breadcrumb > li + li:before {
             color: black;
             content: "/ ";
@@ -34,7 +33,7 @@
             {% if forloop.last %}
                 <li class="active">{{ path }}</li>
                 {% else %}
-                <li><a href="##" onclick="getFileList(this)">{{ path }}</a></li>
+                <li><a href="##" onclick="getFileList(this.text)">{{ path }}</a></li>
             {% endif %}
 
         {% endfor %}
@@ -51,7 +50,11 @@
         <tbody id="filesbody">
         {% for i in files %}
             <tr>
-                <td>{{ i.name }}</td>
+                {% ifequal i.type  'file' %}
+                <td><a href="{% url 'nife:download' %}/?filename={{ i.name }}">{{ i.name }}</a></td>
+                    {% else %}
+                <td><a href="##" onclick="getMoreFile(this)">{{ i.name }}</a></td>
+                {%endifequal  %}
                 <td>{{ i.type }}</td>
                 <td>{{ i.time }}</td>
                 <td>{{ i.size }}</td>

