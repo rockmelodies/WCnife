@@ -19,48 +19,77 @@
     </style>
 {% endblock %}
 {% block content %}
-        <div class="place"></div>
-
-    <div class="container">
-    <br>
-    <h1 class="text-center">Web中国菜刀</h1>
     <div class="place"></div>
-    {% csrf_token %}
-    <input type="hidden" id="url" value="{{ url }}"/>
-    <input type="hidden" id="pwd" value="{{ pwd }}"/>
-    <ol class="breadcrumb" id="bread">
-        {% for path in path_list %}
-            {% if forloop.last %}
-                <li class="active">{{ path }}</li>
-                {% else %}
-                <li><a href="##" onclick="getFileList(this.text)">{{ path }}</a></li>
-            {% endif %}
-
-        {% endfor %}
-    </ol>
-    <table class="table table-striped">
-        <thead>
-      <tr>
-            <th>文件名</th>
-            <th>类型</th>
-            <th>时间</th>
-            <th>大小</th>
-      </tr>
-    </thead>
-        <tbody id="filesbody">
-        {% for i in files %}
-            <tr>
-                {% ifequal i.type  'file' %}
-                <td><a href="{% url 'nife:download' %}/?filename={{ i.name }}">{{ i.name }}</a></td>
-                    {% else %}
-                <td><a href="##" onclick="getMoreFile(this)">{{ i.name }}</a></td>
-                {%endifequal  %}
-                <td>{{ i.type }}</td>
-                <td>{{ i.time }}</td>
-                <td>{{ i.size }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <br><h1 class="text-center">Web中国菜刀</h1>
+        <div class="place"></div>
+        <div class="row">
+            {#   左侧操作菜单  #}
+            <div class="col-md-2">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <button class="btn btn-dark" data-toggle="collapse" data-parent="#accordion"
+                                href="#collapseOne" style="width: 100%" >操作列表</button>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item" style="cursor: pointer">文件上传</li>
+                                    <li class="list-group-item" style="cursor: pointer">新建文件</li>
+                                    <li class="list-group-item" style="cursor: pointer">新建目录</li>
+                                    <li class="list-group-item" style="cursor: pointer">数据库连接</li>
+                                    <li class="list-group-item" style="cursor: pointer">SHELL</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {#   右侧数据表格  #}
+            <div class="col-md-10">
+                {% csrf_token %}
+                <input type="hidden" id="url" value="{{ url }}"/>
+                <input type="hidden" id="pwd" value="{{ pwd }}"/>
+                <ol class="breadcrumb" id="bread">
+                    {% for path in path_list %}
+                        {% if forloop.last %}
+                            <li class="active">{{ path }}</li>
+                        {% else %}
+                            <li><a href="##" onclick="getFileList(this.text)">{{ path }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>文件名</th>
+                            <th>类型</th>
+                            <th>创建时间</th>
+                            <th>大小</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="filesbody">
+                        {% for i in files %}
+                            <tr>
+                                {% ifequal i.type  'file' %}
+                                <td><a href="{% url 'nife:download' %}/?filename={{ i.name }}">{{ i.name }}</a></td>
+                                    {% else %}
+                                <td><a href="##" onclick="getMoreFile(this)">{{ i.name }}</a></td>
+                                {%endifequal  %}
+                                <td><span class="badge badge-info">{{ i.type }}</span></td>
+                                <td>{{ i.time }}</td>
+                                <td>{{ i.size }}</td>
+                                <td>
+                                    <button class="btn btn-warning">重命名</button>
+                                    <button class="btn btn-danger">删除</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}

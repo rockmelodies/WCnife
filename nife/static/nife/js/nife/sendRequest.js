@@ -41,12 +41,18 @@ function  getState(xmlhttp) {
         for(var i=0; i < data['files'].length; i++){
                 if (data['files'][i]['type'] == 'file'){
                     filebody.innerHTML = filebody.innerHTML + '<tr><td><a href='+dow_url+ '/?filename=' + data['files'][i]['name']+'>'+data['files'][i]['name'] +
-                    '</td><td>'+ data['files'][i]['type'] +'</td>'+ '<td>'+ data['files'][i]['time'] +'</td>'+
-                '<td>'+ data['files'][i]['size'] +'</td></tr>';
+                    '</td><td><span class="badge badge-info">'+ data['files'][i]['type'] +'</span></td>'+ '<td>'+ data['files'][i]['time'] +'</td>'+
+                '<td>'+ data['files'][i]['size'] +'</td><td>' +
+                        '<button class="btn btn-warning">重命名</button>' +
+                        '<button class="btn btn-danger">删除</button>' +
+                        '</td></tr>';
                 }else {
                     filebody.innerHTML = filebody.innerHTML + '<tr><td><a href="#" onclick="getMoreFile(this)">'+data['files'][i]['name'] +
-                    '</a></td><td>'+ data['files'][i]['type'] +'</td>'+ '<td>'+ data['files'][i]['time'] +'</td>'+
-                '<td>'+ data['files'][i]['size'] +'</td></tr>';
+                    '</a></td><td><span class="badge badge-info">'+ data['files'][i]['type'] +'</span></td>'+ '<td>'+ data['files'][i]['time'] +'</td>'+
+                '<td>'+ data['files'][i]['size'] +'</td><td>' +
+                        '<button class="btn btn-warning">重命名</button>' +
+                        '<button class="btn btn-danger">删除</button>' +
+                        '</td></tr>';
                 }
         }
     }
@@ -58,7 +64,7 @@ function getMoreFile(ths) {
     var ffnode = ths.parentNode.parentNode;
     // 找到父亲节点的父节点的孩子节点获取类型
     var type_node = ffnode.children[1];
-    var file_type = type_node.innerText;
+    var file_type = type_node.children[0].innerText;
     if(file_type == 'dir'){
         getFileList(ths.text);
 

