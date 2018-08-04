@@ -46,14 +46,14 @@ function  getState(xmlhttp) {
                     filebody.innerHTML = filebody.innerHTML + '<tr><td><a href='+dow_url+ '/?filename=' + data['files'][i]['name']+'>'+data['files'][i]['name'] +
                     '</td><td><span class="badge badge-info">'+ data['files'][i]['type'] +'</span></td>'+ '<td>'+ data['files'][i]['time'] +'</td>'+
                 '<td>'+ data['files'][i]['size'] +'</td><td>' +
-                        '<button class="btn btn-warning">重命名</button>' +
+                        '<button class="btn btn-warning" onclick="changenameModel(this)">重命名</button>' +
                         '<button class="btn btn-danger" onclick="delFile(this)">删除</button>' +
                         '</td></tr>';
                 }else {
                     filebody.innerHTML = filebody.innerHTML + '<tr><td><a href="#" onclick="getMoreFile(this)">'+data['files'][i]['name'] +
                     '</a></td><td><span class="badge badge-info">'+ data['files'][i]['type'] +'</span></td>'+ '<td>'+ data['files'][i]['time'] +'</td>'+
                 '<td>'+ data['files'][i]['size'] +'</td><td>' +
-                        '<button class="btn btn-warning">重命名</button>' +
+                        '<button class="btn btn-warning" onclick="changenameModel(this)">重命名</button>' +
                         '<button class="btn btn-danger" onclick="delFile(this)">删除</button>' +
                         '</td></tr>';
                 }
@@ -107,8 +107,23 @@ function delFile(ths) {
 // 重命名处理
 
 function changename(ths) {
-    var fileOldName = getID("changenameID");
-    var fileNewName = getID("filenewname");
+    var fileOldName = getID("changenameID").value;
+    var fileNewName = getID("filenewname").value;
+    var xmlhttp = getXmlHttp();
+    var data = rename_url + "?oldname=" + fileOldName + "&newname=" + fileNewName;
+    xmlhttp.open("GET", data, true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function () {
+        if(xmlhttp.readyState==4 && xmlhttp.status == 200){
+            var status = strtojson(xmlhttp.responseText);
+            if(status.status == 1){
+                showmsg("重命名成功");
+                getFileList(status.path);
+            }else {
+                showmsg("重命名失敗，请确保你有权限");
+            }
+        }
+    }
 
 }
 

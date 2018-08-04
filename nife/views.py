@@ -127,7 +127,18 @@ def uploadFile(request):
 
 
 def renameFile(request):
-    pass
+    url = request.session.get("url")
+    pwd = request.session.get("pwd")
+    s = SendCode(url=url, pwd=pwd)
+    now_filepath = request.session.get('now_path')
+    path = now_filepath.split('/')[-1]
+    oldname = request.GET.get('oldname')
+    newname = request.GET.get('newname')
+    oldfilepath = now_filepath + '/' + oldname
+    newfilepath = now_filepath + '/' +newname
+    res = s.renameFile(path=oldfilepath, newnamepath=newfilepath)
+    return JsonResponse({"status": res, "path": path})
+
 
 def formatsize(filelist):
     KB = 1024

@@ -7,5 +7,5 @@ urlpatterns = [
     url(r'download', views.download, name='download'),
     url(r'delete', views.deleteFile, name='delete'),
     url(r'upload', views.uploadFile, name="upload"),
-    url(r'rename', views.renameFile, name='rename')
+    url(r'rename', views.renameFile, name='rename'),
 ]
