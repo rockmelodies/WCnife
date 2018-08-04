@@ -1,12 +1,6 @@
 ## WCnife  
 
-![](https://img.shields.io/badge/WCnife-%E5%BC%80%E5%8F%91%E4%B8%AD-blue.svg?nocache2650=1533347576833)  
-
-![](https://img.shields.io/badge/author-elloit-yellow.svg?nocache2650=1533347614582)  
-
-![](https://img.shields.io/badge/progress-50%25-red.svg?nocache2650=1533347786458)  
-
-![](https://img.shields.io/badge/version-1.0.0_Alpha-black.svg?nocache2650=1533347920866)  
+![](https://img.shields.io/badge/WCnife-%E5%BC%80%E5%8F%91%E4%B8%AD-blue.svg?nocache2650=1533347576833)    ![](https://img.shields.io/badge/author-elloit-yellow.svg?nocache2650=1533347614582)    ![](https://img.shields.io/badge/progress-50%25-red.svg?nocache2650=1533347786458)    ![](https://img.shields.io/badge/version-1.0.0_Alpha-black.svg?nocache2650=1533347920866)  
 
 ## Development log  
 
