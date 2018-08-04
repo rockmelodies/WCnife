@@ -1,5 +1,5 @@
 import requests
-from nife.core.phpCodeFun import getFilelistBase, getFilePathBase, getFile, deleteFile
+from nife.core.phpCodeFun import getFilelistBase, getFilePathBase, getFile, deleteFile, uploadFile
 from nife.core.fakeUseAgent import fake_agent
 import json
 import os
@@ -81,6 +81,23 @@ class SendCode(object):
             "User-Agent": fake_agent()
         }
         # res = self.r.post(url=self.url, data=self.data, headers=header, proxies={"http": '127.0.0.1:8080'})
+        res = self.r.post(url=self.url, data=self.data, headers=header)
+        page = etree.HTML(res.text)
+        val = page.xpath('//ek/text()')[0]
+        return val
+
+    def uploadFile(self, path, content):
+        """
+        上传文件
+        :param path:
+        :param name:
+        :return:
+        """
+        self.data['ek'] = uploadFile(path=path, content=content)
+        header = {
+            "User-Agent": fake_agent()
+        }
+        # res = self.r.post(url=self.url, data=self.data, headers=header, proxies={"http": '127.0.0.1:8081'})
         res = self.r.post(url=self.url, data=self.data, headers=header)
         page = etree.HTML(res.text)
         val = page.xpath('//ek/text()')[0]

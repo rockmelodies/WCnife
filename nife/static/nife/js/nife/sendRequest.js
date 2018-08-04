@@ -85,10 +85,10 @@ function sendDeldata(filename) {
         if(xmlhttp.readyState==4 && xmlhttp.status == 200){
             var status = strtojson(xmlhttp.responseText);
             if(status.status == 1){
-                alert("删除成功");
+                showmsg("删除成功");
                 getFileList(status.path);
             }else {
-                alert("删除失败");
+                showmsg("删除失败，请确保你有权限");
             }
         }
     }
@@ -104,4 +104,60 @@ function delFile(ths) {
 }
 
 
+// 重命名处理
 
+function changename(ths) {
+    var fileOldName = getID("changenameID");
+    var fileNewName = getID("filenewname");
+
+}
+
+
+// 上传文件处理
+
+function uploadfile() {
+    var xmlhttp = getXmlHttp();
+    var formData = new FormData();
+    var csrf = getName('csrfmiddlewaretoken')[0].value;
+    formData.append("csrfmiddlewaretoken", getName('csrfmiddlewaretoken')[0].value);
+    formData.append("newfile", getID('newfile').files[0]);
+
+    xmlhttp.open("POST",upload_url, true);
+    xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlhttp.send(formData);
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+            var status = strtojson(xmlhttp.responseText);
+            if (status['status'] == 1){
+                $('#uploadfile').modal('hide');
+                showmsg("上传成功");
+                getFileList(status['path']);
+            }else{
+                $('#uploadfile').modal('hide');
+                showmsg("上传失败，请确保你有权限");
+            }
+        }
+    }
+}
+
+
+
+
+
+
+/*模态框传值处理*/
+function changenameModel(ths) {
+    // 父亲节点的父节点
+    var ffnode = ths.parentNode.parentNode;
+    // 获取文件名
+    var filename = ffnode.children[0].innerText;
+    var modelID = getID("changenameID");
+    modelID.value=filename;
+}
+
+// 显示消息
+function showmsg(msg) {
+    getID('msgID').innerHTML = "";
+    getID('msgID').innerHTML = msg;
+    $('#msg').modal('show');
+}

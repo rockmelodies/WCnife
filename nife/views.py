@@ -1,22 +1,36 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.http import FileResponse
+from django.http import Http404
 from django.http import HttpResponse
+from django.http import HttpResponsePermanentRedirect
+import urllib.parse
+
 from nife.core.SendCode import SendCode
 # Create your views here.
 # 先把基本功能实现， 一些异常情况在处理
 
 
 def index(request):
-
     return render(request, 'nife/index.html')
 
 
 def login(request):
-    url = request.POST.get("url")
-    pwd = request.POST.get("pwd")
+    if request.method == 'POST':
+        url = request.POST.get("url", None)
+        pwd = request.POST.get("pwd", None)
+    else:
+
+        if request.session.get('url') == None:
+            return HttpResponsePermanentRedirect("/")
+        else:
+            url = request.session.get("url")
+            pwd = request.session.get("pwd")
+
     s = SendCode(url=url, pwd=pwd)
-    path = s.getFilePath()
+    path = request.session.get("now_path")
+    if path == None:
+        path = s.getFilePath()
     filelist = s.getFilelist(path)
     filelist = formatsize(filelist)
     path_list = path.split("/")
@@ -26,7 +40,9 @@ def login(request):
     request.session['now_path'] = path
     request.session['url'] = url
     request.session['pwd'] = pwd
-    return render(request, 'nife/html/workbench.html', context={"files":  filelist, "path_list": path_list, "url": url, "pwd": pwd})
+    return render(request, 'nife/html/workbench.html',
+                  context={"files": filelist, "path_list": path_list, "url": url, "pwd": pwd})
+
 
 
 def getFile(request):
@@ -90,6 +106,28 @@ def deleteFile(request):
     res = str(s.deleteFile(filepath))
     return JsonResponse({"status": res, 'path': path})
 
+
+def uploadFile(request):
+    if request.method == 'POST':
+        url = request.session.get("url")
+        pwd = request.session.get("pwd")
+        s = SendCode(url=url, pwd=pwd)
+        newfile = request.FILES.get("newfile")
+        now_filepath = request.session.get('now_path')
+        path = now_filepath.split('/')[-1]
+        filename = newfile.name
+        filepath = now_filepath + "/" + filename
+        content = ""
+        for chunk in newfile.chunks():
+            content = chunk.hex()
+        res = s.uploadFile(filepath, content)
+        return JsonResponse({"status": res, "path": path})
+    else:
+        return HttpResponsePermanentRedirect("/")
+
+
+def renameFile(request):
+    pass
 
 def formatsize(filelist):
     KB = 1024

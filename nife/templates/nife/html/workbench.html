@@ -8,6 +8,7 @@
         var nife_url = "{% url "nife:getfilelist" %}";
         var dow_url = "{% url "nife:download" %}";
         var del_url = "{% url "nife:delete" %}";
+        var upload_url = "{% url 'nife:upload' %}";
     </script>
     <script src={% static 'nife/js/nife/base_fun.js' %}></script>
     <script src={% static 'nife/js/nife/sendRequest.js' %}></script>
@@ -36,7 +37,8 @@
                         <div id="collapseOne" class="panel-collapse collapse in">
                             <div class="panel-body">
                                 <ul class="list-group">
-                                    <li class="list-group-item" style="cursor: pointer">文件上传</li>
+                                    <li class="list-group-item" style="cursor: pointer" data-toggle="modal"
+                                        data-target="#uploadfile">文件上传</li>
                                     <li class="list-group-item" style="cursor: pointer">新建文件</li>
                                     <li class="list-group-item" style="cursor: pointer">新建目录</li>
                                     <li class="list-group-item" style="cursor: pointer">数据库连接</li>
@@ -87,7 +89,7 @@
                                 <td>{{ i.time }}</td>
                                 <td>{{ i.size }}</td>
                                 <td>
-                                    <button class="btn btn-warning">重命名</button>
+                                    <button class="btn btn-warning" data-toggle="modal" data-target="#changename" onclick="changenameModel(this)">重命名</button>
                                     <button class="btn btn-danger" onclick="delFile(this)">删除</button>
                                 </td>
                             </tr>
@@ -97,4 +99,7 @@
             </div>
         </div>
     </div>
+    {% include 'nife/html/changeNameMode.html' %}
+    {% include 'nife/html/uploadFileMode.html' %}
+    {% include 'nife/html/msgMode.html' %}
 {% endblock %}
