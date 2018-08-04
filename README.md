@@ -15,7 +15,7 @@ WCnife 是对中国菜刀抓包分析后，写成的WEB应用，可以连接php�
 
 ## Requirements
 
-1.  直接利用venv中的虚拟环境:    source venv/bin/activate
+1.  直接利用venv中的虚拟环境:   source venv/bin/activate
 2.  也可以自己安装python环境：pip install -r requerments.txt
 
 ## Installation
