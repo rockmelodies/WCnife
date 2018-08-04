@@ -32,7 +32,13 @@ WCnife 是对中国菜刀抓包分析后，写成的WEB应用，可以连接php�
 
 ## Installation
 
-1.  git clone git@github.com:imjdl/WCnife.git
-2.  pip install -r requerments.txt or  source venv/bin/activate
-3.  python manage.py runserver 8080
-4.  浏览器访问 http://127.0.0.1:8080/
+1.  git clone git@github.com:imjdl/WCnife.git
+2.  pip install -r requerments.txt or source venv/bin/activate
+3.  python manage.py runserver 8080
+4.  浏览器访问 [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
+
+### Screenshot
+
+![](http://ovjdtotu0.bkt.clouddn.com/dmeo1.png?nocache2650=1533370659404)  
+
+![](http://ovjdtotu0.bkt.clouddn.com/demo2.png?nocache2650=1533370684313)
