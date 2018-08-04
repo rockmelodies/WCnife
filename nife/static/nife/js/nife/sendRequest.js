@@ -43,19 +43,19 @@ function  getState(xmlhttp) {
         filebody.innerHTML="";
         for(var i=0; i < data['files'].length; i++){
                 if (data['files'][i]['type'] == 'file'){
+
                     filebody.innerHTML = filebody.innerHTML + '<tr><td><a href='+dow_url+ '/?filename=' + data['files'][i]['name']+'>'+data['files'][i]['name'] +
                     '</td><td><span class="badge badge-info">'+ data['files'][i]['type'] +'</span></td>'+ '<td>'+ data['files'][i]['time'] +'</td>'+
-                '<td>'+ data['files'][i]['size'] +'</td><td>' +
-                        '<button class="btn btn-warning" onclick="changenameModel(this)">重命名</button>' +
-                        '<button class="btn btn-danger" onclick="delFile(this)">删除</button>' +
-                        '</td></tr>';
+                '<td>'+ data['files'][i]['size'] +'</td><td><button class="btn btn-warning" data-toggle="modal" data-target="#changename"' +
+                        ' onclick="changenameModel(this)">重命名</button>' +
+                        '<button class="btn btn-danger" onclick="delFile(this)">删除</button></td></tr>';
                 }else {
+
                     filebody.innerHTML = filebody.innerHTML + '<tr><td><a href="#" onclick="getMoreFile(this)">'+data['files'][i]['name'] +
                     '</a></td><td><span class="badge badge-info">'+ data['files'][i]['type'] +'</span></td>'+ '<td>'+ data['files'][i]['time'] +'</td>'+
-                '<td>'+ data['files'][i]['size'] +'</td><td>' +
-                        '<button class="btn btn-warning" onclick="changenameModel(this)">重命名</button>' +
-                        '<button class="btn btn-danger" onclick="delFile(this)">删除</button>' +
-                        '</td></tr>';
+                '<td>'+ data['files'][i]['size'] +'</td><td><button class="btn btn-warning" data-toggle="modal" data-target="#changename"' +
+                        ' onclick="changenameModel(this)">重命名</button>' +
+                        '<button class="btn btn-danger" onclick="delFile(this)">删除</button></td></tr>';
                 }
         }
     }
@@ -124,7 +124,7 @@ function changename(ths) {
             }
         }
     }
-
+    getID("filenewname").value = '';
 }
 
 
@@ -155,9 +155,59 @@ function uploadfile() {
     }
 }
 
+// 新建文件处理
+
+function createfile() {
+    var xmlhttp = getXmlHttp();
+    var formData = new FormData();
+    var csrf = getName('csrfmiddlewaretoken')[0].value;
+    formData.append("csrfmiddlewaretoken", getName('csrfmiddlewaretoken')[0].value);
+    formData.append('filename', getID("createfilename").value);
+    formData.append('content', getID("createfilecontent").value);
+    xmlhttp.open("POST", createfile_url, true);
+    xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlhttp.send(formData);
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+            var status = strtojson(xmlhttp.responseText);
+            if (status['status'] == 1){
+                $('#uploadfile').modal('hide');
+                showmsg("创建文件成功");
+                getFileList(status['path']);
+            }else{
+                $('#uploadfile').modal('hide');
+                showmsg("创建文件失败，请确保你有权限");
+            }
+        }
+    }
+    getID("createfilename").value = '';
+    getID("createfilecontent").value = '';
+}
 
 
 
+// 新建目录
+function createdir() {
+    var xmlhttp = getXmlHttp();
+    var data = createdir_url + "?dirname=" + getID("createdirname").value;
+    xmlhttp.open("GET", data,true);
+    xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+            var status = strtojson(xmlhttp.responseText);
+            if (status['status'] == 1){
+                $('#uploadfile').modal('hide');
+                showmsg("创建目录成功");
+                getFileList(status['path']);
+            }else{
+                $('#uploadfile').modal('hide');
+                showmsg("创建目录失败，请确保你有权限");
+            }
+        }
+    }
+    getID("createdirname").value = '';
+}
 
 
 /*模态框传值处理*/

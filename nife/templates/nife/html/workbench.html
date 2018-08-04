@@ -10,6 +10,8 @@
         var del_url = "{% url "nife:delete" %}";
         var upload_url = "{% url 'nife:upload' %}";
         var rename_url = "{% url 'nife:rename' %}";
+        var createfile_url = "{% url 'nife:createfile' %}";
+        var createdir_url = "{% url 'nife:createdir' %}";
     </script>
     <script src={% static 'nife/js/nife/base_fun.js' %}></script>
     <script src={% static 'nife/js/nife/sendRequest.js' %}></script>
@@ -40,8 +42,10 @@
                                 <ul class="list-group">
                                     <li class="list-group-item" style="cursor: pointer" data-toggle="modal"
                                         data-target="#uploadfile">文件上传</li>
-                                    <li class="list-group-item" style="cursor: pointer">新建文件</li>
-                                    <li class="list-group-item" style="cursor: pointer">新建目录</li>
+                                    <li class="list-group-item" style="cursor: pointer" data-toggle="modal"
+                                        data-target="#createfile">新建文件</li>
+                                    <li class="list-group-item" style="cursor: pointer" data-toggle="modal"
+                                        data-target="#createDir">新建目录</li>
                                     <li class="list-group-item" style="cursor: pointer">数据库连接</li>
                                     <li class="list-group-item" style="cursor: pointer">SHELL</li>
                                 </ul>
@@ -103,4 +107,6 @@
     {% include 'nife/html/changeNameMode.html' %}
     {% include 'nife/html/uploadFileMode.html' %}
     {% include 'nife/html/msgMode.html' %}
+    {% include 'nife/html/createFileMode.html' %}
+    {% include 'nife/html/createDirMode.html' %}
 {% endblock %}

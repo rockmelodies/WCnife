@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'delete', views.deleteFile, name='delete'),
     url(r'upload', views.uploadFile, name="upload"),
     url(r'rename', views.renameFile, name='rename'),
+    url(r'createfile', views.createFile, name='createfile'),
+    url(r'createdir', views.createDir, name='createdir'),
 ]

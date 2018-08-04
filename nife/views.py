@@ -12,6 +12,8 @@ from nife.core.SendCode import SendCode
 
 
 def index(request):
+    # 删除之前的session
+    request.session.clear()
     return render(request, 'nife/index.html')
 
 
@@ -29,12 +31,15 @@ def login(request):
 
     s = SendCode(url=url, pwd=pwd)
     path = request.session.get("now_path")
-    if path == None:
+    if not path:
         path = s.getFilePath()
+
+    # path = s.getFilePath()
     filelist = s.getFilelist(path)
     filelist = formatsize(filelist)
     path_list = path.split("/")
     if path_list[0] == '':
+        print('*'*30)
         path_list[0] = '/'
     # 设置path_sesion 记录用户当前访问的路径
     request.session['now_path'] = path
@@ -137,6 +142,35 @@ def renameFile(request):
     oldfilepath = now_filepath + '/' + oldname
     newfilepath = now_filepath + '/' +newname
     res = s.renameFile(path=oldfilepath, newnamepath=newfilepath)
+    return JsonResponse({"status": res, "path": path})
+
+
+def createFile(request):
+    if request.method == 'POST':
+        url = request.session.get("url")
+        pwd = request.session.get("pwd")
+        s = SendCode(url=url, pwd=pwd)
+        now_filepath = request.session.get('now_path')
+        path = now_filepath.split('/')[-1]
+        filename = request.POST.get('filename')
+        content = request.POST.get('content')
+        filepath = now_filepath + '/' + filename
+        res = s.createFile(filepath, content)
+        return JsonResponse({"status": res, "path": path})
+    else:
+        return HttpResponsePermanentRedirect("/")
+
+
+
+def createDir(request):
+    url = request.session.get("url")
+    pwd = request.session.get("pwd")
+    s = SendCode(url=url, pwd=pwd)
+    now_filepath = request.session.get('now_path')
+    path = now_filepath.split('/')[-1]
+    dirname = request.GET.get('dirname')
+    filedir = now_filepath + '/' + dirname
+    res = s.createDir(filedir)
     return JsonResponse({"status": res, "path": path})
 
 
