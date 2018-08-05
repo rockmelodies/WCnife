@@ -57,14 +57,25 @@ def download(request):
     pwd = request.session.get("pwd")
     s = SendCode(url=url, pwd=pwd)
     filename = request.GET.get('filename')
-    filepath = request.session.get('now_path')+ '/' + filename
+    filepath = request.session.get('now_path') + '/' + filename
     now_filepath = s.getFile(filename, filepath)
-    print(now_filepath)
     file = open(now_filepath, 'rb')
     response = FileResponse(file)
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="%s"'%filename
+    response['Content-Disposition'] = 'attachment;filename="%s"' % filename
     return response
+
+
+def deleteFile(request):
+    url = request.session.get("url")
+    pwd = request.session.get("pwd")
+    now_filepath = request.session.get('now_path')
+    path = now_filepath.split('/')[-1]
+    s = SendCode(url=url, pwd=pwd)
+    filename = request.GET.get('filename')
+    filepath = now_filepath + '/' +filename
+    res = str(s.deleteFile(filepath))
+    return JsonResponse({"status": res, 'path': path})
 
 
 def formatsize(filelist):

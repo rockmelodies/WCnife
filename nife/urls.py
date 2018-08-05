@@ -5,4 +5,5 @@ urlpatterns = [
     url(r'login/', views.login, name="login"),
     url(r'getfilelist', views.getFile, name="getfilelist"),
     url(r'download', views.download, name='download'),
+    url(r'delete', views.deleteFile, name='delete'),
 ]

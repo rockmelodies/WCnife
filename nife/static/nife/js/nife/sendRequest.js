@@ -9,10 +9,8 @@ function getFileList(path) {
     var xmlhttp = getXmlHttp();
     xmlhttp.open("POST",nife_url, true);
     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    // var url = getID('url').value;
-    // var pwd = getID('pwd').value;
     var csrf = getName('csrfmiddlewaretoken')[0].value;
-    var data = "&csrfmiddlewaretoken=" + csrf + "&path=" + path;
+    var data = "csrfmiddlewaretoken=" + csrf + "&path=" + path;
     xmlhttp.send(data);
     xmlhttp.onreadystatechange = function() {
         getState(xmlhttp);
@@ -44,14 +42,14 @@ function  getState(xmlhttp) {
                     '</td><td><span class="badge badge-info">'+ data['files'][i]['type'] +'</span></td>'+ '<td>'+ data['files'][i]['time'] +'</td>'+
                 '<td>'+ data['files'][i]['size'] +'</td><td>' +
                         '<button class="btn btn-warning">重命名</button>' +
-                        '<button class="btn btn-danger">删除</button>' +
+                        '<button class="btn btn-danger" onclick="delFile(this)">删除</button>' +
                         '</td></tr>';
                 }else {
                     filebody.innerHTML = filebody.innerHTML + '<tr><td><a href="#" onclick="getMoreFile(this)">'+data['files'][i]['name'] +
                     '</a></td><td><span class="badge badge-info">'+ data['files'][i]['type'] +'</span></td>'+ '<td>'+ data['files'][i]['time'] +'</td>'+
                 '<td>'+ data['files'][i]['size'] +'</td><td>' +
                         '<button class="btn btn-warning">重命名</button>' +
-                        '<button class="btn btn-danger">删除</button>' +
+                        '<button class="btn btn-danger" onclick="delFile(this)">删除</button>' +
                         '</td></tr>';
                 }
         }
@@ -71,6 +69,34 @@ function getMoreFile(ths) {
     }
 }
 
+// 返送删除文件请求
+function sendDeldata(filename) {
+    var xmlhttp = getXmlHttp();
+    var data = "?filename=" + filename;
+    xmlhttp.open("get",del_url+data, true);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function() {
+        if(xmlhttp.readyState==4 && xmlhttp.status == 200){
+            var status = strtojson(xmlhttp.responseText);
+            if(status.status == 1){
+                alert("删除成功");
+                getFileList(status.path);
+            }else {
+                alert("删除失败");
+            }
+        }
+    }
+}
+
+// 删除文件处理
+function delFile(ths) {
+    // 父亲节点的父节点
+    var ffnode = ths.parentNode.parentNode;
+    // 获取文件名
+    var filename = ffnode.children[0].innerText;
+    sendDeldata(filename);
+}
 
 
 

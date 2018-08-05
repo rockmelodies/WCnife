@@ -7,6 +7,7 @@
     <script>
         var nife_url = "{% url "nife:getfilelist" %}";
         var dow_url = "{% url "nife:download" %}";
+        var del_url = "{% url "nife:delete" %}";
     </script>
     <script src={% static 'nife/js/nife/base_fun.js' %}></script>
     <script src={% static 'nife/js/nife/sendRequest.js' %}></script>
@@ -83,7 +84,7 @@
                                 <td>{{ i.size }}</td>
                                 <td>
                                     <button class="btn btn-warning">重命名</button>
-                                    <button class="btn btn-danger">删除</button>
+                                    <button class="btn btn-danger" onclick="delFile(this)">删除</button>
                                 </td>
                             </tr>
                         {% endfor %}

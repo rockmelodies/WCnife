@@ -7,6 +7,7 @@ def getFilePathBase():
     :return: php->base64 code
     """
     code = """
+    header("Content-type:text/html;charset=UTF-8");
     @ini_set("display_errors","0");
 	@set_time_limit(0);
 	@set_magic_quotes_runtime(0);
