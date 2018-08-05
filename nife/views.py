@@ -154,6 +154,8 @@ def createFile(request):
         path = now_filepath.split('/')[-1]
         filename = request.POST.get('filename')
         content = request.POST.get('content')
+        if content is None:
+            content = ''
         filepath = now_filepath + '/' + filename
         res = s.createFile(filepath, content)
         return JsonResponse({"status": res, "path": path})
