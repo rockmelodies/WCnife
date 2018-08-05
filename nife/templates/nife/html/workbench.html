@@ -57,7 +57,11 @@
                         {% if forloop.last %}
                             <li class="active">{{ path }}</li>
                         {% else %}
-                            <li><a href="##" onclick="getFileList(this.text)">{{ path }}</a></li>
+                            {% ifequal path '/' %}
+                                <li><a href="##" onclick="getFileList('/')">根目录</a></li>
+                                {% else %}
+                                <li><a href="##" onclick="getFileList(this.text)">{{ path }}</a></li>
+                            {% endifequal %}
                         {% endif %}
                     {% endfor %}
                 </ol>

@@ -27,6 +27,11 @@ function  getState(xmlhttp) {
         var bread = getID('bread');
         bread.innerHTML="";
         for(var i=0; i< data['path_list'].length; i++) {
+            // alert(data['path_list'][i]);
+            if (data['path_list'][i] == '/'){
+                bread.innerHTML = bread.innerHTML + '<li><a href="##" onclick="getFileList(\'/\')">根目录</a></li>';
+                continue;
+            }
             if (i == data['path_list'].length - 1) {
                 bread.innerHTML = bread.innerHTML + '<li class="active">' + data['path_list'][i] + '</li>';
             } else {

