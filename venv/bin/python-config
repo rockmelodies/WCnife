@@ -1,4 +1,4 @@
-#!/home/elloit/PyProjects/WCnife/venv/bin/python
+#!/home/elloit/tools/WCnife/venv/bin/python
 
 import sys
 import getopt
