@@ -36,7 +36,6 @@ class Command(BaseCommand):
                         self.stdout.write(self.style.SUCCESS("Bye!!!"))
                         break
                     res, newdir = s.execShell(cmd=bash, options=raw_cmd.format(sitdir, cmd))
-                    print(res)
                     sitdir = newdir
 
             except Exception as e:
